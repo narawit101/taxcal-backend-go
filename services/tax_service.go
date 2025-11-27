@@ -79,7 +79,7 @@ func CalculateTax(req models.TaxRequest) models.TaxResponse {
 	finalTax := tax - req.WHT
 
 	return models.TaxResponse{
-		Tax: finalTax,
-		// TaxLevel: taxLevels,
+		Tax:      finalTax,
+		TaxLevel: taxLevels,
 	}
 }

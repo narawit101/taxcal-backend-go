@@ -9,7 +9,32 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type TaxResponseOutput struct {
+	Tax float64 `json:"tax"`
+}
+
 func CalculateTaxHandler(c *gin.Context) {
+	var req models.TaxRequest
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid JSON format"})
+		return
+	}
+
+	if err := utils.ValidateTaxRequest(req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	result := services.CalculateTax(req)
+	output := TaxResponseOutput{
+		Tax: result.Tax,
+	}
+
+	c.JSON(http.StatusOK, output)
+}
+
+func CalculateTaxHandler2(c *gin.Context) {
 	var req models.TaxRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
