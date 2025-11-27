@@ -12,11 +12,7 @@ func CalculateTax(req models.TaxRequest) models.TaxResponse {
 	donation := 0.0
 	for _, a := range req.Allowances {
 		if a.AllowanceType == "donation" {
-			if a.Amount > 100000 {
-				donation = 100000
-			} else {
-				donation = a.Amount
-			}
+			donation = a.Amount
 		}
 	}
 
