@@ -9,8 +9,8 @@ import (
 func SetupRouter() *gin.Engine {
     r := gin.Default()
 
-    r.POST("/tax/calculations", handlers.CalculateTaxHandler)
-    r.POST("/tax/calculations2", handlers.CalculateTaxHandler2)
+    r.POST("/tax/calculations/simple", handlers.CalculateTaxHandlerSimple)
+    r.POST("/tax/calculations/detail", handlers.CalculateTaxHandlerDetail)
 
     return r
 }

@@ -13,7 +13,7 @@ type TaxResponseOutput struct {
 	Tax float64 `json:"tax"`
 }
 
-func CalculateTaxHandler(c *gin.Context) {
+func CalculateTaxHandlerSimple(c *gin.Context) {
 	var req models.TaxRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -34,7 +34,7 @@ func CalculateTaxHandler(c *gin.Context) {
 	c.JSON(http.StatusOK, output)
 }
 
-func CalculateTaxHandler2(c *gin.Context) {
+func CalculateTaxHandlerDetail(c *gin.Context) {
 	var req models.TaxRequest
 
 	if err := c.ShouldBindJSON(&req); err != nil {
