@@ -1,23 +1,26 @@
 package services
 
 import (
+	"math"
 	"test-backend/models"
 )
 
 func CalculateTax(req models.TaxRequest) models.TaxResponse {
-	// STEP 1: Base Allowance
 	baseAllowance := 60000.0
 
 	// STEP 2: Allowance: Donation (max 100,000)
 	donation := 0.0
 	for _, a := range req.Allowances {
 		if a.AllowanceType == "donation" {
-			donation = a.Amount
+			if a.Amount > 100000 {
+				donation = 100000
+			} else {
+				donation = a.Amount
+			}
 		}
 	}
 
 	totalAllowance := baseAllowance + donation
-
 	taxable := req.TotalIncome - totalAllowance
 	if taxable < 0 {
 		taxable = 0
@@ -38,7 +41,6 @@ func CalculateTax(req models.TaxRequest) models.TaxResponse {
 	var tax float64
 	remaining := taxable
 	previous := 0.0
-
 	taxLevels := []models.TaxLevel{}
 
 	for _, b := range brackets {
@@ -71,8 +73,13 @@ func CalculateTax(req models.TaxRequest) models.TaxResponse {
 		previous = b.Limit
 	}
 
-	// STEP 3: WHT
+	// STEP 3: หัก WHT
 	finalTax := tax - req.WHT
+	if finalTax < 0 {
+		finalTax = 0
+	}
+
+	finalTax = math.Round(finalTax)
 
 	return models.TaxResponse{
 		Tax:      finalTax,
